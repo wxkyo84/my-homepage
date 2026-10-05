@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rex 的个人主页</title>
+  <meta name="description" content="Rex，一个正在学习 AI 工具的 AI 小白。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0b14;
+      --surface: rgba(255, 255, 255, .04);
+      --text: #f8f6f0;
+      --muted: #b9b5c9;
+      --line: rgba(255, 255, 255, .1);
+      --accent: #a5b4fc;
+      --accent-2: #f9a8d4;
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Playfair Display", "Noto Serif SC", "Songti SC", "STSong",
+        "SimSun", Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* 渐变背景动画 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(-45deg, #0b0b14, #1e1b4b, #3b0764, #0f2a3d, #0b0b14);
+      background-size: 400% 400%;
+      animation: gradientShift 18s ease infinite;
+    }
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* 背景光晕 */
+    .glow {
+      position: fixed;
+      inset: -20vh -20vw auto auto;
+      width: 70vw; height: 70vw;
+      max-width: 720px; max-height: 720px;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
+      opacity: .22;
+      filter: blur(40px);
+      pointer-events: none;
+      z-index: 0;
+      animation: float 14s ease-in-out infinite;
+    }
+    .glow.two {
+      inset: auto auto -25vh -20vw;
+      background: radial-gradient(circle, var(--accent-2) 0%, transparent 65%);
+      animation-delay: -7s;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-30px, 40px); }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* 导航 */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 0;
+    }
+    .logo {
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+    nav ul { display: flex; gap: 28px; list-style: none; }
+    nav a.link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 15px;
+      transition: color .2s;
+    }
+    nav a.link:hover { color: var(--text); }
+
+    /* 首屏 */
+    .hero {
+      min-height: calc(100vh - 100px);
+      min-height: calc(100svh - 100px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-bottom: 60px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 6px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .badge .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, .6);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    h1 {
+      font-size: clamp(44px, 9vw, 88px);
+      line-height: 1.08;
+      letter-spacing: -.03em;
+      font-weight: 800;
+    }
+    h1 .grad {
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p.lead {
+      margin-top: 24px;
+      font-size: clamp(17px, 2.4vw, 21px);
+      color: var(--muted);
+      max-width: 560px;
+    }
+    .cta {
+      margin-top: 40px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s, background .2s;
+    }
+    .btn.primary {
+      background: var(--text);
+      color: var(--bg);
+    }
+    .btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px -8px rgba(0, 0, 0, .35);
+    }
+    .btn.ghost {
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: var(--surface);
+    }
+    .btn.ghost:hover { transform: translateY(-2px); }
+
+    /* 区块 */
+    section.block { padding: 80px 0; }
+    .eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+    h2 {
+      font-size: clamp(28px, 5vw, 40px);
+      letter-spacing: -.02em;
+      line-height: 1.2;
+      margin-bottom: 36px;
+    }
+
+    .about-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 32px;
+      align-items: center;
+      padding: 40px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .avatar {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--bg);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 16px 40px -12px var(--accent);
+    }
+    .about-card blockquote {
+      font-size: clamp(20px, 3vw, 26px);
+      font-weight: 600;
+      line-height: 1.5;
+      letter-spacing: -.01em;
+    }
+    .about-card blockquote::before {
+      content: "“";
+      color: var(--accent);
+      margin-right: 2px;
+    }
+    .about-card blockquote::after {
+      content: "”";
+      color: var(--accent);
+      margin-left: 2px;
+    }
+    .about-card .who {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .card {
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform .25s, border-color .25s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+    .card .icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+      margin-bottom: 18px;
+    }
+    .card h3 { font-size: 18px; margin-bottom: 6px; }
+    .card p { color: var(--muted); font-size: 15px; }
+
+    /* 时间线 */
+    .timeline { list-style: none; position: relative; padding-left: 28px; }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 6px; top: 8px; bottom: 8px;
+      width: 2px;
+      background: linear-gradient(var(--accent), var(--accent-2), transparent);
+    }
+    .timeline li { position: relative; padding-bottom: 32px; }
+    .timeline li:last-child { padding-bottom: 0; }
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: -28px; top: 7px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 3px solid var(--accent);
+    }
+    .timeline li.done::before { background: var(--accent); }
+    .timeline .step { font-size: 13px; color: var(--muted); }
+    .timeline h3 { font-size: 18px; margin: 2px 0 4px; }
+    .timeline p { color: var(--muted); font-size: 15px; }
+
+    footer {
+      padding: 60px 0 48px;
+      border-top: 1px solid var(--line);
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* 入场动画 */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .glow, .badge .dot, body::before { animation: none; }
+    }
+
+    /* 响应式 */
+    @media (max-width: 760px) {
+      .grid { grid-template-columns: 1fr; }
+      .about-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 32px 24px;
+      }
+      .avatar { margin: 0 auto; width: 96px; height: 96px; font-size: 38px; }
+      section.block { padding: 56px 0; }
+    }
+    @media (max-width: 480px) {
+      .wrap { padding: 0 16px; }
+      nav ul { gap: 18px; }
+      .btn { flex: 1; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="glow two"></div>
+
+  <div class="wrap">
+    <nav>
+      <a href="#" class="logo">Rex<span>.</span></a>
+      <ul>
+        <li><a class="link" href="#about">关于</a></li>
+        <li><a class="link" href="#learn">探索</a></li>
+        <li><a class="link" href="#path">路线</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero">
+      <div class="badge reveal"><span class="dot"></span>正在学习 AI 中</div>
+      <h1 class="reveal">你好，我是<br /><span class="grad">Rex</span> 👋</h1>
+      <p class="lead reveal">一个 AI 小白，正在用 AI 工具一步步靠近大大的梦想。</p>
+      <div class="cta reveal">
+        <a class="btn primary" href="#about">认识我 →</a>
+        <a class="btn ghost" href="#path">我的学习路线</a>
+      </div>
+    </header>
+
+    <section class="block" id="about">
+      <div class="eyebrow reveal">About</div>
+      <h2 class="reveal">关于我</h2>
+      <div class="about-card reveal">
+        <div class="avatar">R</div>
+        <div>
+          <blockquote>我希望学习 AI 工具，实现大大的梦想。</blockquote>
+          <p class="who">— Rex · AI 小白 · 永远好奇</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="learn">
+      <div class="eyebrow reveal">Exploring</div>
+      <h2 class="reveal">我在探索的方向</h2>
+      <div class="grid">
+        <div class="card reveal">
+          <div class="icon">💬</div>
+          <h3>AI 对话助手</h3>
+          <p>学会提问，让 AI 成为学习和工作的好搭档。</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon">🎨</div>
+          <h3>AI 创作工具</h3>
+          <p>用 AI 生成图片、文字和视频，把想法变成作品。</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon">⚡</div>
+          <h3>AI 编程</h3>
+          <p>借助 AI 写代码，比如——亲手做出这个主页。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="path">
+      <div class="eyebrow reveal">Roadmap</div>
+      <h2 class="reveal">我的学习路线</h2>
+      <ul class="timeline">
+        <li class="done reveal">
+          <div class="step">第一步 · 已完成</div>
+          <h3>迈出第一步</h3>
+          <p>决定开始学习 AI，并拥有了自己的个人主页。</p>
+        </li>
+        <li class="reveal">
+          <div class="step">第二步 · 进行中</div>
+          <h3>熟练使用 AI 工具</h3>
+          <p>每天动手尝试，把 AI 用到真实的生活和工作里。</p>
+        </li>
+        <li class="reveal">
+          <div class="step">第三步 · 未来</div>
+          <h3>实现大大的梦想 ✨</h3>
+          <p>用 AI 创造属于自己的作品，让梦想落地。</p>
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      <span>© <span id="year"></span> Rex</span>
+      <span>保持好奇，持续学习 🚀</span>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const items = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("in");
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      items.forEach((el, i) => {
+        el.style.transitionDelay = (i % 4) * 80 + "ms";
+        io.observe(el);
+      });
+    } else {
+      items.forEach((el) => el.classList.add("in"));
+    }
+  </script>
+</body>
+</html>
